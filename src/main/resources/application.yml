@@ -5,14 +5,14 @@ spring:
   application:
     name: biblioteca
   datasource:
-    url: jdbc:postgresql://localhost:5432/biblioteca_db
-    username: postgres
-    password: saed20032004
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+build
+.gradle
+*.jar
+*.log
+.DS_Store
+application-local.yml
