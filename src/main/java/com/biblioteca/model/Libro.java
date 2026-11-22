@@ -1,21 +1,37 @@
 package com.biblioteca.model;
 
+import jakarta.persistence.*;
 
-// Clase que define los datos de un libro
+@Entity
+@Table(name = "libros")
 public class Libro {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String author;
+
+    @Column(nullable = false, unique = true)
     private String isbn;
+
+    @Column(nullable = false)
     private int publicationYear;
+
+    @Column(nullable = false)
     private String category;
+
+    @Column(nullable = false)
     private boolean available;
 
     public Libro() {}
 
-    public Libro(Long id, String title, String author, String isbn,
+    public Libro(String title, String author, String isbn,
                  int publicationYear, String category, boolean available) {
-        this.id = id;
         this.title = title;
         this.author = author;
         this.isbn = isbn;

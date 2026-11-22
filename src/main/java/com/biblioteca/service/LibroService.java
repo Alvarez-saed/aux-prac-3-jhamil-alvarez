@@ -2,27 +2,24 @@ package com.biblioteca.service;
 
 import com.biblioteca.dto.LibroDTO;
 import com.biblioteca.model.Libro;
+import com.biblioteca.repository.LibroRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
-
-// Aquí manejo toda la logica de: guardar, buscar, modificar y borrar
 @Service
 public class LibroService {
 
-    // Esta es la lista temporal en la memoria, sin base de datos
-    private final List<Libro> libros = new ArrayList<>();
-    // Esto servira para generar ID automaticos
-    private final AtomicLong contador = new AtomicLong(1);
+    private final LibroRepository repositorio;
+
+    public LibroService(LibroRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
     public Libro crear(LibroDTO dto) {
         Libro nuevo = new Libro(
-                contador.getAndIncrement(),
                 dto.getTitle(),
                 dto.getAuthor(),
                 dto.getIsbn(),
@@ -30,18 +27,15 @@ public class LibroService {
                 dto.getCategory(),
                 dto.isAvailable()
         );
-        libros.add(nuevo);
-        return nuevo;
+        return repositorio.save(nuevo);
     }
 
     public List<Libro> listarTodos() {
-        return new ArrayList<>(libros);
+        return repositorio.findAll();
     }
 
     public Libro obtenerPorId(Long id) {
-        return libros.stream()
-                .filter(l -> l.getId().equals(id))
-                .findFirst()
+        return repositorio.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Libro con ID " + id + " no encontrado"));
     }
@@ -54,11 +48,14 @@ public class LibroService {
         libro.setPublicationYear(dto.getPublicationYear());
         libro.setCategory(dto.getCategory());
         libro.setAvailable(dto.isAvailable());
-        return libro;
+        return repositorio.save(libro);
     }
 
     public void eliminar(Long id) {
-        Libro libro = obtenerPorId(id);
-        libros.remove(libro);
+        if (!repositorio.existsById(id)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Libro con ID " + id + " no encontrado");
+        }
+        repositorio.deleteById(id);
     }
 }

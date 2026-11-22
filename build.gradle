@@ -23,6 +23,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     compileOnly 'org.projectlombok:lombok'
+    // Conector de PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+
+// Spring Data JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
